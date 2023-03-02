@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rmdir /S /Q \\HY\\osa3_FullStack\\build && cd \\HY\\FullStack-HY\\part2\\puhelinluettelo && npm run build && xcopy /E /I build \\HY\\osa3_FullStack\\build && cd \\HY\\osa3_FullStack",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "MSa",
   "license": "ISC",
