@@ -58,9 +58,15 @@ app.get("/api/persons/:id", (req, res) => {
 app.post("/api/persons", (req, res) => {
   const id = Math.floor(Math.random() * 1000);
   const body = req.body;
-  if (!body.name) {
-    return response.status(400).json({
-      error: "name missing",
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: "name or number missing",
+    });
+  }
+
+  if (persons.find((p) => p.name === body.name)) {
+    return res.status(400).json({
+      error: "name must be unique",
     });
   }
 
