@@ -1,15 +1,21 @@
 const { response } = require("express");
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
-var morgan = require('morgan')
-
+var morgan = require("morgan");
 
 app.use(express.json());
+app.use(cors());
 
 //app.use(morgan('tiny'))
-morgan.token('reqx', function (req, res) { return JSON.stringify(req.body) })
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :reqx'))
+morgan.token("reqx", function (req, res) {
+  return JSON.stringify(req.body);
+});
+
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :reqx")
+);
 
 let persons = [
   {
@@ -100,13 +106,14 @@ app.get("/info", (req, res) => {
 });
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-  }
-  
-app.use(unknownEndpoint)
+  response.status(404).send({ error: "unknown endpoint" });
+};
 
-const PORT = 3001;
+app.use(unknownEndpoint);
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+// https://fs-osa3.onrender.com
