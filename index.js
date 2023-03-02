@@ -55,6 +55,25 @@ app.get("/api/persons/:id", (req, res) => {
   }
 });
 
+app.post("/api/persons", (req, res) => {
+  const id = Math.floor(Math.random() * 1000);
+  const body = req.body;
+  if (!body.name) {
+    return response.status(400).json({
+      error: "name missing",
+    });
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: id,
+  };
+  persons = persons.concat(person);
+  console.log("adding person", person);
+  res.json(person);
+});
+
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   persons = persons.filter((p) => p.id !== id);
