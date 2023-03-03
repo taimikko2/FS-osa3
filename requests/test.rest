@@ -1,3 +1,4 @@
+
 GET http://localhost:3001/api/persons
 
 ###
@@ -21,3 +22,13 @@ DELETE http://localhost:3001/api/persons/6402170b840cb59291ad2eb1
 ###
 
 HEAD http://localhost:3001/info
+
+###
+
+PUT http://localhost:3001/api/persons/6402214b20edbe45342fd773
+Content-Type: application/json
+
+{
+    "name": "Joku toinen",
+    "number": "9090999"
+}
