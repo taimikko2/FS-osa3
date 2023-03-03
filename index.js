@@ -6,8 +6,8 @@ const Person = require("./models/person");
 
 var morgan = require("morgan");
 
-app.use(express.json());
 app.use(express.static("build"));
+app.use(express.json());
 app.use(cors());
 
 morgan.token("reqx", function (req, res) {
@@ -32,10 +32,22 @@ app.get("/api/persons", (req, res) => {
     });
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  Person.findById(req.params.id).then((person) => {
-    res.json(person);
-  });
+app.get("/api/persons/:id", (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch(
+      (error) => next(error)
+      /*{     
+      console.log(error);
+      res.status(400).send({ error: "malformatted id" });
+    } */
+    );
 });
 
 app.post("/api/persons", (req, res) => {
@@ -62,28 +74,39 @@ app.post("/api/persons", (req, res) => {
   });
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  // TODO: delete
-  //persons = persons.filter((p) => p.id !== id);
-  res.status(204).end();
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 app.get("/info", (req, res) => {
   const time = new Date();
-  Person.find({})
-  .then((p) => {
+  Person.find({}).then((p) => {
     res.send(`<div>phonebook has info for ${p.length} people</div>
     <div>${time}</div>`);
-  })
+  });
 });
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
 };
 
-app.use(unknownEndpoint);
+app.use(unknownEndpoint); // lopussa, mutta ennen errorHandler:ia (kakki loput osuu tähän)
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler); // unknownEndpointin jälkeen
 const PORT = process.env.PORT; // process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
