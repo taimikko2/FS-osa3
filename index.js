@@ -6,7 +6,7 @@ const cors = require("cors");
 var morgan = require("morgan");
 
 app.use(express.json());
-app.use(express.static('build'))
+app.use(express.static("build"));
 app.use(cors());
 
 //app.use(morgan('tiny'))
@@ -90,7 +90,7 @@ app.post("/api/persons", (req, res) => {
     id: id,
   };
   persons = persons.concat(person);
-  console.log("adding person", person);
+  //console.log("adding person", person);
   res.json(person);
 });
 
@@ -112,7 +112,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
