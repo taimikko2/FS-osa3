@@ -17,19 +17,13 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :reqx")
 );
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello</h1><div>Try /api/persons</div");
-});
-
-app.get("/api/persons", (req, res) => {
+app.get("/api/persons", (req, res, next) => {
   Person.find({})
     .then((p) => {
       console.log("P", JSON.stringify(p));
       res.json(p);
     })
-    .catch((error) => {
-      console.log("error GET /api/persons :", error.message);
-    });
+    .catch((error) => next(error));
 });
 
 app.get("/api/persons/:id", (req, res, next) => {
@@ -41,13 +35,7 @@ app.get("/api/persons/:id", (req, res, next) => {
         res.status(404).end();
       }
     })
-    .catch(
-      (error) => next(error)
-      /*{     
-      console.log(error);
-      res.status(400).send({ error: "malformatted id" });
-    } */
-    );
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (req, res) => {
@@ -82,12 +70,14 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.get("/info", (req, res) => {
+app.get("/info", (req, res, next) => {
   const time = new Date();
-  Person.find({}).then((p) => {
-    res.send(`<div>phonebook has info for ${p.length} people</div>
+  Person.find({})
+    .then((p) => {
+      res.send(`<div>phonebook has info for ${p.length} people</div>
     <div>${time}</div>`);
-  });
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (req, res) => {
