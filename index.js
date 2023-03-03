@@ -5,6 +5,7 @@ const cors = require("cors");
 const Person = require("./models/person");
 
 var morgan = require("morgan");
+const { db } = require("./models/person");
 
 app.use(express.static("build"));
 app.use(express.json());
@@ -38,6 +39,23 @@ app.get("/api/persons/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+app.put("/api/persons/:id", (req, res, next) => {
+  const body = req.body;
+  const id = req.params.id;
+  console.log(
+    "PUT /api/persons/id ",
+    JSON.stringify(req.params),
+    JSON.stringify(body)
+  );
+  Person.updateOne({ _id: id }, [
+    { $set: { number: body.number, name: body.name } },
+  ])
+    .then((x) => {
+      console.log("put then", JSON.stringify(x));
+    })
+    .catch((error) => next(error));
+});
+
 app.post("/api/persons", (req, res) => {
   const body = req.body;
   if (!body.name || !body.number) {
@@ -45,12 +63,6 @@ app.post("/api/persons", (req, res) => {
       error: "name or number missing",
     });
   }
-  // TODO: ?
-  /*  if (persons.find((p) => p.name === body.name)) {
-    return res.status(400).json({
-      error: "name must be unique",
-    });
-  } */
 
   const person = new Person({
     name: body.name,
