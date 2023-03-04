@@ -62,6 +62,7 @@ app.put("/api/persons/:id", (req, res, next) => {
 
 app.post("/api/persons", (req, res, next) => {
   const body = req.body;
+  console.log("POST ",body);
   if (!body.name || !body.number) {
     return res.status(400).json({
       error: "name or number missing",
