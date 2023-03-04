@@ -50,8 +50,9 @@ app.put("/api/persons/:id", (req, res, next) => {
   Person.updateOne({ _id: id }, [
     { $set: { number: body.number, name: body.name } },
   ])
-    .then((x) => {
-      console.log("put then", JSON.stringify(x));
+    .then((person) => {
+      console.log("put then", JSON.stringify(person));
+      res.json(person);
     })
     .catch((error) => next(error));
 });
