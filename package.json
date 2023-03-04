@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rmdir /S /Q \\HY\\osa3_FullStack\\build && cd \\HY\\FullStack-HY\\part2\\puhelinluettelo && npm run build && xcopy /E /I build \\HY\\osa3_FullStack\\build && cd \\HY\\osa3_FullStack",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "MSa",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.35.0",
     "nodemon": "^2.0.20"
   }
 }
