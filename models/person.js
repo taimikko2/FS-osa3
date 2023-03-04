@@ -33,7 +33,7 @@ function correctNumber(val) {
 const many = [
   { validator: hasOneHyphen, msg: '{VALUE} should have one hyphen "-"' },
   { validator: correctAreaCode, msg: `{VALUE} area code should be 2 or 3 digits` },
-  { validator: correctNumber, msg: `{VALUE} should have numbers after hyphen "-"` },
+  { validator: correctNumber, msg: `{VALUE} should have at least 5 numbers after hyphen "-"` },
 ];
 
 const personSchema = new mongoose.Schema({
